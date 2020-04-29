@@ -117,12 +117,14 @@ and returns the score at each pont in the game, like so:
 8th inning: awayTeam - homeTeam
 9th inning: awayTeam - homeTeam
 
-Final Score: awayTeam - homeTeam */
+// Final Score: awayTeam - homeTeam */
+
 function getInningScore( func ){
 
   return func();
   
 }
+
 
 function scoreboard( getInningScore, inning, num) {
 
@@ -141,7 +143,8 @@ function scoreboard( getInningScore, inning, num) {
     //AWAY GETS THE POINTS
     if(teamThatScoredInTheInning === 0){
        awayTeam += getInningScore(inning);
-    //OR HOME GETS THE POINTS  
+    
+    //OR HOME GETS THE POINTS
     }else if(teamThatScoredInTheInning === 1){
        homeTeam += getInningScore(inning);
     }
@@ -170,7 +173,7 @@ function scoreboard( getInningScore, inning, num) {
 
 scoreboard(getInningScore, inning, 9);
 
-
+//HELPER FUNCTION
 function returnAffix( counter ){
 
   let numAppend;
