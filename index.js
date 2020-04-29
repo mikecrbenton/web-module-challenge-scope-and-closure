@@ -59,8 +59,10 @@ Write a function called `inning` that generates a random number of points that a
 
 function inning(){
 
-  console.log( Math.round(Math.random() * 2 ) );
-  return Math.random() * 2;
+  //DEBUGGING
+  //console.log( Math.round(Math.random() * 2 ) );
+
+  return Math.round(Math.random() * 2);
 }
 
 /* Task 3: finalScore()
@@ -78,9 +80,20 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
+function finalScore( inning, num ){
 
-  /*Code Here*/
+  let gameScore = 0;
+
+  for( let i=0 ; i < num ; i++ ){
+    gameScore += inning();
+  }
+
+  //DEBUGGING
+  //console.log( "the score is " + gameScore );
+
+  return {
+    final_score: gameScore
+  }
 
 }
 
@@ -105,9 +118,73 @@ and returns the score at each pont in the game, like so:
 9th inning: awayTeam - homeTeam
 
 Final Score: awayTeam - homeTeam */
+function getInningScore( func ){
 
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+  return func();
+  
+}
+
+function scoreboard( getInningScore, inning, num) {
+
+  let awayTeam = 0;
+  let homeTeam = 0;
+  //WHAT INNING ARE WE IN - START IN 1ST
+  let inningCounter = 1;
+  let scoreArray = [];
+
+  //WHILE THERE ARE INNINGS
+  while( inningCounter <= num){
+
+    //DETERMINE WHICH TEAM TO GIVE THE POINTS TO
+    let teamThatScoredInTheInning = Math.round(Math.random() * 1);
+
+    //AWAY GETS THE POINTS
+    if(teamThatScoredInTheInning === 0){
+       awayTeam += getInningScore(inning);
+    //OR HOME GETS THE POINTS  
+    }else if(teamThatScoredInTheInning === 1){
+       homeTeam += getInningScore(inning);
+    }
+
+    //AFFIX THE RIGHT INNING "ST","ND","RD","TH"
+    let inningAppend = returnAffix( inningCounter);
+
+    //PUSH THE NEW STRING TO THE ARRAY
+    scoreArray.push(`${inningCounter}${inningAppend} inning: ${awayTeam} - ${homeTeam}`);
+
+    //EDGE CASE - LAST INNING
+    if(inningCounter === num){
+      scoreArray.push(`Final Score: ${awayTeam} - ${homeTeam}`);
+    }
+    //INCRIMENT COUNTER
+    inningCounter++;
+
+  }//-------------END WHILE LOOP
+
+  //DEBUGGING
+  console.log(scoreArray);
+
+  return scoreArray;
+  
+}//------------END FUNCTION
+
+scoreboard(getInningScore, inning, 9);
+
+
+function returnAffix( counter ){
+
+  let numAppend;
+
+  if( counter === 1 ){ 
+    numAppend = "st"; 
+  }else if( counter === 2 ){ 
+    numAppend = "nd"; 
+  }else if( counter === 3 ){ 
+    numAppend = "rd"; 
+  }else{
+    numAppend = "th";
+  }
+  return numAppend;
 }
 
 
