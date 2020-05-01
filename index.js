@@ -27,9 +27,10 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
- *    - 
+ *      1 uses a closure and returns a function
  * 
  * 2. Which of the two uses a closure? How can you tell?
+ *      1, because it accesses count, even after countermaker is not on the stack
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
  *
@@ -119,59 +120,69 @@ and returns the score at each pont in the game, like so:
 
 // Final Score: awayTeam - homeTeam */
 
-function getInningScore( func ){
-
-  return func();
+function scoreboard( inning, num) {
   
-}
-
-
-function scoreboard( getInningScore, inning, num) {
-
+  //CLOSURE VARIABLES IN MAIN FUNCTION
   let awayTeam = 0;
   let homeTeam = 0;
-  //WHAT INNING ARE WE IN - START IN 1ST
+  //START IN 1ST INNING
   let inningCounter = 1;
-  let scoreArray = [];
 
-  //WHILE THERE ARE INNINGS
-  while( inningCounter <= num){
 
-    //DETERMINE WHICH TEAM TO GIVE THE POINTS TO
+  //CLOSURE FUNCTION THAT ACCESSES THE OUTER VARIABLES
+  return function getInningScore(){
+     
+    //EDGE CASES  
+    // 1) RETURN FINAL SCORE IF ONE PAST THE NUMBER OF INNINGS
+    if( inningCounter ===  ( num + 1 ) ){
+          console.log(`Final Score: ${awayTeam} - ${homeTeam}`);
+          inningCounter++;//increment once more to end
+          return;
+    }
+    // 2) IF NUMBER IS PAST THE INNINGS PLAYED - FUNCTION WILL END
+    if(inningCounter > num ){      
+      return;
+    }
+
+    //DETERMINE WHICH TEAM TO GIVE THE POINTS TO==================
+
     let teamThatScoredInTheInning = Math.round(Math.random() * 1);
 
-    //AWAY GETS THE POINTS
+    //AWAY OR HOME GETS THE POINTS
     if(teamThatScoredInTheInning === 0){
-       awayTeam += getInningScore(inning);
-    
-    //OR HOME GETS THE POINTS
+          awayTeam += inning();
     }else if(teamThatScoredInTheInning === 1){
-       homeTeam += getInningScore(inning);
-    }
+          homeTeam += inning();
+
+    }//===========================================================
 
     //AFFIX THE RIGHT INNING "ST","ND","RD","TH"
     let inningAppend = returnAffix( inningCounter);
 
-    //PUSH THE NEW STRING TO THE ARRAY
-    scoreArray.push(`${inningCounter}${inningAppend} inning: ${awayTeam} - ${homeTeam}`);
+    //RETURN THE STRING FOR THE NEW INNING AND **INCREMENT THE COUNTER**
+      console.log(`${inningCounter++}${inningAppend} inning: ${awayTeam} - ${homeTeam}`);
 
-    //EDGE CASE - LAST INNING
-    if(inningCounter === num){
-      scoreArray.push(`Final Score: ${awayTeam} - ${homeTeam}`);
-    }
-    //INCRIMENT COUNTER
-    inningCounter++;
 
-  }//-------------END WHILE LOOP
+  }//END OF INNER "CLOSURE" FUNCTION
 
-  //DEBUGGING
-  console.log(scoreArray);
 
-  return scoreArray;
-  
-}//------------END FUNCTION
+}//END OF SCOREBOARD FUNCTION
 
-scoreboard(getInningScore, inning, 9);
+let myReturnedClosureFunction = scoreboard( inning, 9);
+
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
+myReturnedClosureFunction();
 
 //HELPER FUNCTION
 function returnAffix( counter ){
