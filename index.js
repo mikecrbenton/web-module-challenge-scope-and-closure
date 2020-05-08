@@ -33,18 +33,41 @@ function processFirstItem(stringList, callback) {
  *      1, because it accesses count, even after countermaker is not on the stack
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
- *
+ *       Keep track of a variable, without having it in global scope - like creating a new "main()" function
+ *       A "static" variable that exists inside it's own context
+ *       - possibly uses less memory than global variables in closure
 */
+
+// STEPS CREATING A CLOSURE
+// 1) Create a function that returns another function
+// 2) Store/save your "returned" function into a new variable
+// 3) When you call that new function/variable, you have access to the
+//    variable(s) within the larger "enclosing" function
 
 // counter1 code
 function counterMaker() {
+
+  //THIS IS THE "ENCLOSED" VARIABLE
   let count = 0;
+
+  //RETURN YOUR INNER FUNCTION
   return function counter() {
    return count++;
   }
-}
 
+}
+//RETURN A "FUNCTION" TO THIS NEW VARIABLE
 const counter1 = counterMaker();
+
+//WHEN YOU CALL THE NEW FUNCTION, IT STILL HAS
+//ACCESS TO THE SCOPE OF THE VARIABLES IN THE
+//ENCLOSING FUNCTION
+
+// console.log( counter1() ); // 0
+// console.log( counter1() ); // 1
+// console.log( counter1() ); // 2
+// console.log( counter1() ); // 3
+// console.log( counter1() ); // 4
 
 // counter2 code
 let count = 0;
