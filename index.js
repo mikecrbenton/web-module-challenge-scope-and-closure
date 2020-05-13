@@ -22,7 +22,7 @@ function processFirstItem(stringList, callback) {
 
 
 ///// M V P ///////
-
+//================================================================================
 /* Task 1: `counterMaker`
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
@@ -30,14 +30,14 @@ function processFirstItem(stringList, callback) {
  *      1 uses a closure and returns a function
  * 
  * 2. Which of the two uses a closure? How can you tell?
- *      1, because it accesses count, even after countermaker is not on the stack
+ *      1, because it accesses count even after countermaker is not being called
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
  *       Keep track of a variable, without having it in global scope - like creating a new "main()" function
  *       A "static" variable that exists inside it's own context
  *       - possibly uses less memory than global variables in closure
 */
-
+//================================================================================
 // STEPS CREATING A CLOSURE
 // 1) Create a function that returns another function
 // 2) Store/save your "returned" function into a new variable
@@ -76,10 +76,11 @@ function counter2() {
   return count++;
 }
 
-
+//================================================================================
 /* Task 2: inning() 
 
 Write a function called `inning` that generates a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
+//================================================================================
 
 function inning(){
 
@@ -89,6 +90,10 @@ function inning(){
   return Math.round(Math.random() * 2);
 }
 
+
+
+
+//================================================================================
 /* Task 3: finalScore()
 
 Write a higher order function called `finalScore` that accepts the callback function `inning` (from above) 
@@ -101,8 +106,9 @@ finalScore(inning, 9) might return:
   "Home": 11,
   "Away": 5,
 }
-
 */ 
+//================================================================================
+
 
 function finalScore( inning, num ){
 
@@ -111,7 +117,6 @@ function finalScore( inning, num ){
   for( let i=0 ; i < num ; i++ ){
     gameScore += inning();
   }
-
   //DEBUGGING
   //console.log( "the score is " + gameScore );
 
@@ -121,6 +126,9 @@ function finalScore( inning, num ){
 
 }
 
+
+
+//================================================================================
 /* Task 4: 
 
 Create a function called `scoreboard` that accepts the following parameters: 
@@ -142,24 +150,33 @@ and returns the score at each pont in the game, like so:
 9th inning: awayTeam - homeTeam
 
 // Final Score: awayTeam - homeTeam */
+//================================================================================
+
 
 function scoreboard( inning, num) {
   
+   //EDGE CASE - TOO MANY INNINGS
+   if(num > 9){
+      console.log(`${num} is too many innings - baseball only has 9 innings`);
+   }
+
   //CLOSURE VARIABLES IN MAIN FUNCTION
   let awayTeam = 0;
   let homeTeam = 0;
   //START IN 1ST INNING
   let inningCounter = 1;
 
+  
 
   //CLOSURE FUNCTION THAT ACCESSES THE OUTER VARIABLES
   return function getInningScore(){
      
-    //EDGE CASES  
+    //EDGE CASES
+
     // 1) RETURN FINAL SCORE IF ONE PAST THE NUMBER OF INNINGS
     if( inningCounter ===  ( num + 1 ) ){
           console.log(`Final Score: ${awayTeam} - ${homeTeam}`);
-          inningCounter++;//increment once more to end
+          inningCounter++;//increment once more to end - if called again
           return;
     }
     // 2) IF NUMBER IS PAST THE INNINGS PLAYED - FUNCTION WILL END
@@ -167,8 +184,7 @@ function scoreboard( inning, num) {
       return;
     }
 
-    //DETERMINE WHICH TEAM TO GIVE THE POINTS TO==================
-
+    //DETERMINE WHICH TEAM TO GIVE THE POINTS TO
     let teamThatScoredInTheInning = Math.round(Math.random() * 1);
 
     //AWAY OR HOME GETS THE POINTS
@@ -177,38 +193,33 @@ function scoreboard( inning, num) {
     }else if(teamThatScoredInTheInning === 1){
           homeTeam += inning();
 
-    }//===========================================================
+    }
 
     //AFFIX THE RIGHT INNING "ST","ND","RD","TH"
-    let inningAppend = returnAffix( inningCounter);
+    let inningAppend = returnAppend( inningCounter);
 
     //RETURN THE STRING FOR THE NEW INNING AND **INCREMENT THE COUNTER**
       console.log(`${inningCounter++}${inningAppend} inning: ${awayTeam} - ${homeTeam}`);
-
 
   }//END OF INNER "CLOSURE" FUNCTION
 
 
 }//END OF SCOREBOARD FUNCTION
 
-let myReturnedClosureFunction = scoreboard( inning, 9);
 
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
-myReturnedClosureFunction();
+
+let myReturnedClosureFunction;
+
+myReturnedClosureFunction = scoreboard( inning, 11);
+myReturnedClosureFunction = scoreboard( inning, 9);
+
+//PURPOSELY CALL FUNCTION TOO MANY INNINGS ( PAST 9 INNINGS )
+for(let i=0 ; i < 15 ; i++){
+   myReturnedClosureFunction(); 
+}
 
 //HELPER FUNCTION
-function returnAffix( counter ){
+function returnAppend( counter ){
 
   let numAppend;
 
